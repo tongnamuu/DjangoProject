@@ -27,6 +27,8 @@ class RoomAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "count_amenities",
+        "count_photos",
+        "total_rating",
         "country",
         "city",
         "price",
@@ -71,9 +73,20 @@ class RoomAdmin(admin.ModelAdmin):
     count_amenities.short_description = "hi tongnamuu!!"
     # count_amenities 가 hi tongnamuu!!로 나타남
 
+    def count_photos(self, obj):
+        return obj.photos.count()
+
 
 @admin.register(models.RoomType, models.Facility, models.Amenity, models.HouseRule)
 class ItemAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "used_by",
+    )
+
+    def used_by(self, obj):
+        return obj.rooms.count()
+
     pass
 
 
