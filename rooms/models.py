@@ -53,7 +53,7 @@ class Room(core_models.TimeStampedModel):
     name = models.CharField(max_length=140)
     description = models.TextField()
     country = CountryField()
-    city = models.CharField(max_length=80)
+    city = models.CharField(max_length=140)
     price = models.IntegerField()
     address = models.CharField(max_length=140)
     guests = models.IntegerField()
@@ -74,12 +74,21 @@ class Room(core_models.TimeStampedModel):
     facilities = models.ManyToManyField(Facility, related_name="rooms", blank=True)
     house_rules = models.ManyToManyField(HouseRule, related_name="rooms", blank=True)
 
+    def save(self, *args, **kwargs):
+        # print("#############################")
+        # print(self.city)
+        # city="Chicken City"
+        self.city = str.capitalize(self.city)
+        super().save(*args, **kwargs)  # Call the real save(method
+
     def __str__(self):
         return self.name
 
     def total_rating(self):
         all_reviews = self.reviews.all()
         all_ratings = 0
+        if len(all_reviews) == 0:
+            return 0
         for review in all_reviews:
             all_ratings += review.rating_average()
             # print(review.rating_average())
