@@ -4,5 +4,10 @@
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
   "python.linting.flake8Args": ["--max - line - length == 40"],
-  "python.formatting.provider": "black"
+  "python.formatting.provider": "black",
+  "files.associations": {
+    "**/templates/*.html": "django-html",
+    "**/templates/*": "django-txt"
+  },
+  "emmet.includeLanguages": { "django-html": "html" }
 }
