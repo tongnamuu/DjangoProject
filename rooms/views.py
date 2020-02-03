@@ -5,8 +5,29 @@ from . import models
 from math import ceil
 
 from django.core.paginator import Paginator, EmptyPage
+from django.views.generic import ListView
+from django.utils import timezone
 
 # Create your views here.
+
+
+class HomeView(ListView):
+    # https://ccbv.co.uk/projects/Django/2.2/ 참고
+    """HomeView Definition"""
+
+    model = models.Room
+    paginate_by = 10
+    paginate_orphans = 3
+    ordering = "created"
+    context_object_name = "rooms"
+    # page_kwarg = "potato"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = timezone.now()
+        context["now"] = now
+        return context
+
 
 # def all_rooms(request):
 #     now = datetime.now()
@@ -36,17 +57,17 @@ from django.core.paginator import Paginator, EmptyPage
 #         },
 #     )
 # using django paginator
-def all_rooms(request):
-    page = request.GET.get("page", 1)
-    room_list = models.Room.objects.all()
-    paginator = Paginator(
-        room_list, 10, orphans=4
-    )  # orphans 이하의 목록은 last page에 합쳐진다, 더 크면 새로운 페이지생성
-    # print(vars(rooms.paginator))
-    # page = paginator.get_page(page)
-    try:
-        # page = paginator.page(page or 1)
-        context_page = paginator.page(int(page))
-        return render(request, "rooms/home.html", {"page": context_page})
-    except Exception:
-        return redirect("/")
+# def all_rooms(request):
+#     page = request.GET.get("page", 1)
+#     room_list = models.Room.objects.all()
+#     paginator = Paginator(
+#         room_list, 10, orphans=4
+#     )  # orphans 이하의 목록은 last page에 합쳐진다, 더 크면 새로운 페이지생성
+#     # print(vars(rooms.paginator))
+#     # page = paginator.get_page(page)
+#     try:
+#         # page = paginator.page(page or 1)
+#         context_page = paginator.page(int(page))
+#         return render(request, "rooms/home.html", {"page": context_page})
+#     except Exception:
+#         return redirect("/")
