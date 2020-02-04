@@ -2,6 +2,7 @@ from django.db import models
 from django_countries.fields import CountryField
 from core import models as core_models
 from users import models as user_models
+from django.urls import reverse  # for url
 
 
 class AbstractItem(core_models.TimeStampedModel):
@@ -74,6 +75,9 @@ class Room(core_models.TimeStampedModel):
     facilities = models.ManyToManyField(Facility, related_name="rooms", blank=True)
     house_rules = models.ManyToManyField(HouseRule, related_name="rooms", blank=True)
 
+    def __str__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         # print("#############################")
         # print(self.city)
@@ -81,8 +85,8 @@ class Room(core_models.TimeStampedModel):
         self.city = str.capitalize(self.city)
         super().save(*args, **kwargs)  # Call the real save(method
 
-    def __str__(self):
-        return self.name
+    def get_absolute_url(self):
+        return reverse("rooms:detail", kwargs={"pk": self.pk})
 
     def total_rating(self):
         all_reviews = self.reviews.all()
@@ -102,3 +106,4 @@ class Photo(core_models.TimeStampedModel):
 
     def __str__(self):
         return self.caption
+

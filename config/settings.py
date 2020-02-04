@@ -25,7 +25,9 @@ SECRET_KEY = "ip)34e7w=hunhaag%#wu7^ngwadp*67i8$2(phqigjt$m^a5c#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    # "*",  #IF DEBUG FALSE, We need this
+]
 
 
 # Application definition

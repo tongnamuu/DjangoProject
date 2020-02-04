@@ -7,6 +7,8 @@ from math import ceil
 from django.core.paginator import Paginator, EmptyPage
 from django.views.generic import ListView
 from django.utils import timezone
+from django.urls import reverse
+from django.http import Http404
 
 # Create your views here.
 
@@ -27,6 +29,17 @@ class HomeView(ListView):
         now = timezone.now()
         context["now"] = now
         return context
+
+
+def room_detail(request, pk):
+    # print(pk)
+    try:
+        room = models.Room.objects.get(pk=pk)
+        return render(request, "rooms/detail.html", {"room": room})
+    except models.Room.DoesNotExist:
+        raise Http404()
+        # return redirect("/")
+        # return redirect(reverse("core:home"))
 
 
 # def all_rooms(request):
