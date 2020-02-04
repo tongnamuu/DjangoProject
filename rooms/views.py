@@ -5,7 +5,7 @@ from . import models
 from math import ceil
 
 from django.core.paginator import Paginator, EmptyPage
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.urls import reverse
 from django.http import Http404
@@ -31,15 +31,22 @@ class HomeView(ListView):
         return context
 
 
-def room_detail(request, pk):
-    # print(pk)
-    try:
-        room = models.Room.objects.get(pk=pk)
-        return render(request, "rooms/detail.html", {"room": room})
-    except models.Room.DoesNotExist:
-        raise Http404()
-        # return redirect("/")
-        # return redirect(reverse("core:home"))
+class RoomDetail(DetailView):
+    """RoomDetail Definition"""
+
+    model = models.Room
+    # pk_url_kwarg = "apple" url의 pk대신 apple 사용가능
+
+
+# def room_detail(request, pk):
+#     # print(pk)
+#     try:
+#         room = models.Room.objects.get(pk=pk)
+#         return render(request, "rooms/detail.html", {"room": room})
+#     except models.Room.DoesNotExist:
+#         raise Http404()
+#         # return redirect("/")
+#         # return redirect(reverse("core:home"))
 
 
 # def all_rooms(request):
