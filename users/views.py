@@ -15,10 +15,12 @@ from . import forms
 # 너가 다른 웹사이트에서 페이스북으로 form을 보내는 것
 class LoginView(View):
     def get(self, request):
-        form = forms.LoginForm()
+        form = forms.LoginForm(initial={"email": "tongnamuu@naver.com"})
         return render(request, "users/login.html", {"form": form,})
 
     def post(self, request):
         form = forms.LoginForm(request.POST)
-        print(form)
+        if form.is_valid():
+            print(form.cleaned_data)
+        return render(request, "users/login.html", {"form": form,})
 
