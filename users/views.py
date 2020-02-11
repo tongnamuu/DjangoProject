@@ -1,5 +1,7 @@
 from django.shortcuts import render, reverse, redirect
+from django.urls import reverse_lazy
 from django.views import View
+from django.views.generic import FormView
 from django.contrib.auth import authenticate, login, logout
 from . import forms
 
@@ -14,28 +16,46 @@ from . import forms
 # 그 버튼을 누르면 페이스북에 요청을 보낸다
 # 요청은 너의 브라우저에서 일어났기 때문에 브라우저는 쿠키를 보낼 것이다
 # 너가 다른 웹사이트에서 페이스북으로 form을 보내는 것
-class LoginView(View):
-    def get(self, request):
-        form = forms.LoginForm(initial={"email": "tongnamuu@naver.com"})
-        return render(request, "users/login.html", {"form": form,})
+class LoginView(FormView):
+    template_name = "users/login.html"
+    form_class = forms.LoginForm
+    success_url = reverse_lazy("core:home")
 
-    def post(self, request):
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-            # print(form.cleaned_data)
-            email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
-            user = authenticate(request, username=email, password=password)
-            print(user)
-            if user is not None:
-                login(request, user)
-                print("######login#########")
-                return redirect(reverse("core:home"))
-            else:
-                print("Error")
-        return render(request, "users/login.html", {"form": form,})
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        user = authenticate(self.request, username=email, password=password)
+        if user is not None:
+            login(self.request, user)
+        return super().form_valid(form)
+
+
+# class LoginView(View):
+#     def get(self, request):
+#         form = forms.LoginForm(initial={"email": "tongnamuu@naver.com"})
+#         return render(request, "users/login.html", {"form": form,})
+
+#     def post(self, request):
+#         form = forms.LoginForm(request.POST)
+#         if form.is_valid():
+#             # print(form.cleaned_data)
+#             email = form.cleaned_data.get("email")
+#             password = form.cleaned_data.get("password")
+#             user = authenticate(request, username=email, password=password)
+#             print(user)
+#             if user is not None:
+#                 login(request, user)
+#                 print("######login#########")
+#                 return redirect(reverse("core:home"))
+#             else:
+#                 print("Error")
+#         return render(request, "users/login.html", {"form": form,})
 
 
 def log_out(request):
     logout(request)
     return redirect(reverse("core:home"))
+
+
+class SignUpView(FormView):
+    pass
