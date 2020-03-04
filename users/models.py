@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.mail import send_mail
+from django.conf import settings
+import uuid
 
 # Create your models here.
 
@@ -42,3 +45,18 @@ class User(AbstractUser):
     )
 
     superhost = models.BooleanField(default=False)
+    email_confirmed = models.BooleanField(default=False)
+    email_secret = models.CharField(max_length=20, default="", blank=True)
+
+    def verify_email(self):
+        if self.email_confirmed is False:
+            secret = uuid.uuid4().hex[:20]
+            self.email_secret = secret
+            send_mail(
+                "Verify Account!",
+                f"Verify account, this is key : {secret}",
+                settings.EMAIL_FROM,
+                [self.email],
+                fail_silently=False,
+            )
+        return
