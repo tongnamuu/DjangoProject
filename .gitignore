@@ -132,4 +132,7 @@ dmypy.json
 
 .vscode/
 uploads/
+package-lock.json
 .vscode/settings.json
+node_modules
+.gitignore
