@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 import uuid
 
 # Create your models here.
@@ -52,11 +54,19 @@ class User(AbstractUser):
         if self.email_confirmed is False:
             secret = uuid.uuid4().hex[:20]
             self.email_secret = secret
+            # html_message = (
+            #     f'Verify account, Click here :<a href="http://127.0.0.1:8000/users/verify/{secret}">here </a>',
+            # )
+            html_message = render_to_string(
+                "emails/verify_email.html", {"secret": secret}
+            )
             send_mail(
                 "Verify Account!",
-                f"Verify account, this is key : {secret}",
+                strip_tags(html_message),
                 settings.EMAIL_FROM,
                 [self.email],
                 fail_silently=False,
+                html_message=html_message,
             )
+            self.save()
         return
