@@ -1,7 +1,7 @@
 <ul class="flex items-center text-sm font-medium h-full">
   {% if user.is_authenticated %}
     <li class="nav_link"><a href="{%url "users:logout"%}">Log out</a></li>
-    <li class="ml-8 border-b-2 border-white px-2 h-full flex items-center">Hello {{user.username}}</li>
+    <li class="font-bold ml-8 border-b-2 border-white px-2 h-full flex items-center">Hello {{user.username}}</li>
   {% else %}
     <li class="nav_link"><a href="{%url "users:login"%}">Login</a></li>
     <li class="nav_link"><a href="{%url "users:signup"%}">Sign Up</a></li>
