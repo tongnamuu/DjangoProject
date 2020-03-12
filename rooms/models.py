@@ -98,6 +98,10 @@ class Room(core_models.TimeStampedModel):
             # print(review.rating_average())
         return round(all_ratings / len(all_reviews), 2)
 
+    def first_photo(self):
+        return self.photos.all()[0].file.url
+        # reeturn photo, = self.photos.all()[:1]
+
 
 class Photo(core_models.TimeStampedModel):
     caption = models.CharField(max_length=80)
