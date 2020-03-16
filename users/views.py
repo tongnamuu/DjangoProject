@@ -135,16 +135,17 @@ def github_callbacK(request):
 
                 profile_json = api_request.json()
                 username = profile_json.get("login", None)
+                print(username)
                 if username is not None:
-                    name = profile_json.get("name")
+                    name = profile_json.get("name", None)
                     email = profile_json.get("email")
                     if email is None:
                         raise GithubException()
                     # bio = profile_json.get("bio")
                     try:
                         user = models.User.objects.get(email=email)
-                        if user.login_method != models.User.LOGIN_GITHUB:
-                            raise GithubException()
+                        # if user.login_method != models.User.LOGIN_GITHUB:
+                        # raise GithubException()
                     except models.User.DoesNotExist:
                         user = models.User.objects.create(
                             username=email,
@@ -159,6 +160,7 @@ def github_callbacK(request):
                     login(request, user)
                     return redirect(reverse("core:home"))
                 else:
+                    print("username error")
                     raise GithubException()
         else:
             raise GithubException()
@@ -207,8 +209,8 @@ def kakao_callback(request):
         name = account.get("nickname")
         try:
             user = models.User.objects.get(email=email)
-            if user.login_method != models.User.LOGIN_KAKAO:
-                raise KakaoException()
+            # if user.login_method != models.User.LOGIN_KAKAO:
+            # raise KakaoException()
         except models.User.DoesNotExist:
             user = models.User.objects.create(
                 email=email,
