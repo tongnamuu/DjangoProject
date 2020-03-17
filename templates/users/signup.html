@@ -13,11 +13,49 @@
     {% include 'partials/social_login.html' %}
     <form method="POST" action={%url "users:signup"%}>
         {% csrf_token %}
-        {{form.first_name}}
-        {{form.last_name}}
-        {{form.email}}
-        {{form.password}}
-        {{form.password1}}
+        <div class="input">  
+            {{form.first_name}} 
+            {% if form.first_name.errors %}
+                {% for e in form.first_name.errors  %}
+                    <span class="text-red-700 font-medium text-sm">{{e}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="input">  
+            {{form.last_name}}        
+            {% if form.last_name.errors %}
+                {% for e in form.last_name.errors  %}
+                    <span class="text-red-700 font-medium text-sm">{{e}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="input">  
+            {{form.email}}        
+            {% if form.email.errors %}
+                {% for e in form.email.errors  %}
+                    <span class="text-red-700 font-medium text-sm">{{e}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="input">  
+            {{form.password}}        
+            {% if form.password.errors %}
+                {% for e in form.password.errors  %}
+                    <span class="text-red-700 font-medium text-sm">{{e}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="input">        
+            {{form.password1}}        
+            {% if form.password1.errors %}
+                {% for e in form.password1.errors  %}
+                    <span class="text-red-700 font-medium text-sm">{{e}}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+
         <button class="btn bg-red-500 text-white">Sign Up</button>
     </form>
     <div class="mt-3">
